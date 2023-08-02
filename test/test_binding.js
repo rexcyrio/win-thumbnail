@@ -1,11 +1,11 @@
-const Winthumbnail = require("../dist/binding.js");
+const winthumbnail = require("../dist/binding.js");
 const assert = require("assert");
 
-assert(Winthumbnail, "The expected function is undefined");
+assert(winthumbnail, "The expected function is undefined");
 
 function testBasic()
 {
-    const result =  Winthumbnail("hello");
+    const result =  winthumbnail("hello");
     assert.strictEqual(result, "world", "Unexpected value returned");
 }
 
