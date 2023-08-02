@@ -1,7 +1,7 @@
 {
     "main": "lib/binding.js",
     "dependencies": {
-        "node-addon-api": "^1.1.0"
+        "node-addon-api": "^1.7.2"
     },
     "scripts": {
         "pretest": "tsc",
@@ -11,8 +11,8 @@
     "name": "winthumbnail",
     "version": "1.0.0",
     "devDependencies": {
-        "@types/node": "^7.0.22",
-        "typescript": "^2.3.3"
+        "@types/node": "^7.10.14",
+        "typescript": "^5.1.6"
     },
     "author": "",
     "license": "ISC",
