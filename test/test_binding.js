@@ -1,14 +1,17 @@
 const winthumbnail = require("../dist/binding.js");
 const assert = require("assert");
 
-assert(winthumbnail, "The expected function is undefined");
+assert.ok(winthumbnail);
 
-function testBasic()
-{
-    const result =  winthumbnail("hello");
-    assert.strictEqual(result, "world", "Unexpected value returned");
-}
+const result = winthumbnail.create("C:\\Users\\Stefan Lee\\another");
+assert.strictEqual(result, "C:\\Users\\Stefan Lee\\another");
 
-assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");
+assert.throws(() => {
+  winthumbnail.create();
+});
 
-console.log("Tests passed- everything looks OK!");
+assert.throws(() => {
+  winthumbnail.create(1, 2);
+});
+
+console.log("OK");

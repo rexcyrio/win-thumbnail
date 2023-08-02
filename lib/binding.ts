@@ -1,4 +1,3 @@
-const addon = require('../build/Release/winthumbnail-native');
+const winthumbnail = require("../build/Release/winthumbnail-native");
 
-export = addon.winthumbnail
-
+export = winthumbnail;
