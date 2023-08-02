@@ -15,8 +15,22 @@ Napi::String Method(const Napi::CallbackInfo &info)
     return Napi::String::New(env, "");
   }
 
-  Napi::String path_string = info[0].As<Napi::String>();
-  return path_string;
+  Napi::String first_argument = info[0].ToString();
+  std::string path_string = first_argument.Utf8Value();
+  const char *path_string_ptr = path_string.c_str();
+  struct stat metadata;
+
+  if (stat(path_string_ptr, &metadata) != 0)
+  {
+    std::string error_message = path_string + " is an invalid file path";
+
+    Napi::TypeError::New(env, error_message)
+        .ThrowAsJavaScriptException();
+
+    return Napi::String::New(env, "");
+  }
+
+  return first_argument;
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports)
