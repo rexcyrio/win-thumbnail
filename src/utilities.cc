@@ -1,6 +1,7 @@
 #include <string>
 #include <shlobj_core.h>
 #include <shobjidl_core.h>
+#include <gdiplus.h>
 
 // taken from https://cplusplus.com/forum/windows/100661/
 HBITMAP GetThumbnail(std::wstring File)
@@ -51,4 +52,49 @@ HBITMAP GetThumbnail(std::wstring File)
   pSub->Release();
 
   return hThumbnail;
+}
+
+// taken from https://stackoverflow.com/a/51388079
+void convertHBitmapToCharBuffer(HBITMAP hbitmap)
+{
+  // taken from https://learn.microsoft.com/en-us/windows/win32/api/gdiplusinit/nf-gdiplusinit-gdiplusstartup
+  Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+  ULONG_PTR gdiplusToken;
+  Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+  // get gdi+ bitmap
+  Gdiplus::Bitmap bitmap(hbitmap, nullptr);
+
+  // write to IStream
+  IStream *istream = nullptr;
+  HRESULT hr = CreateStreamOnHGlobal(NULL, TRUE, &istream);
+  CLSID clsid_png;
+  CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &clsid_png);
+  bitmap.Save(istream, &clsid_png);
+
+  // CLSID of PNG encoder is {557CF406-1A04-11D3-9A73-0000F81EF32E}
+  // reference: https://learn.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-retrieving-the-class-identifier-for-an-encoder-use
+
+  // uncomment to save thumbnail image to file
+  // bitmap.Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
+
+  // get memory handle associated with istream
+  HGLOBAL hg = NULL;
+  GetHGlobalFromStream(istream, &hg);
+
+  // copy IStream to buffer
+  int bufsize = GlobalSize(hg);
+  char *buffer = new char[bufsize];
+
+  // lock & unlock memory
+  LPVOID ptr = GlobalLock(hg);
+  memcpy(buffer, ptr, bufsize);
+  GlobalUnlock(hg);
+
+  // release will automatically free the memory allocated in CreateStreamOnHGlobal
+  istream->Release();
+
+  Gdiplus::GdiplusShutdown(gdiplusToken);
+
+  // PNG image data is now available in the variable `buffer` with size `bufsize`
 }
