@@ -2,6 +2,7 @@
 #include <shlobj_core.h>
 #include <shobjidl_core.h>
 #include <gdiplus.h>
+#include <vector>
 
 // taken from https://cplusplus.com/forum/windows/100661/
 HBITMAP GetThumbnail(std::wstring File)
@@ -97,4 +98,62 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
   Gdiplus::GdiplusShutdown(gdiplusToken);
 
   // PNG image data is now available in the variable `buffer` with size `bufsize`
+}
+
+// not used
+// taken from https://stackoverflow.com/a/5346026
+HRESULT GetGdiplusEncoderClsid(const std::wstring &format, GUID *pGuid)
+{
+  HRESULT hr = S_OK;
+  UINT nEncoders = 0; // number of image encoders
+  UINT nSize = 0;     // size of the image encoder array in bytes
+  std::vector<BYTE> spData;
+  Gdiplus::ImageCodecInfo *pImageCodecInfo = NULL;
+  Gdiplus::Status status;
+  bool found = false;
+
+  if (format.empty() || !pGuid)
+  {
+    hr = E_INVALIDARG;
+  }
+
+  if (SUCCEEDED(hr))
+  {
+    *pGuid = GUID_NULL;
+    status = Gdiplus::GetImageEncodersSize(&nEncoders, &nSize);
+
+    if ((status != Gdiplus::Ok) || (nSize == 0))
+    {
+      hr = E_FAIL;
+    }
+  }
+
+  if (SUCCEEDED(hr))
+  {
+
+    spData.resize(nSize);
+    pImageCodecInfo = (Gdiplus::ImageCodecInfo *)&spData.front();
+    status = Gdiplus::GetImageEncoders(nEncoders, nSize, pImageCodecInfo);
+
+    if (status != Gdiplus::Ok)
+    {
+      hr = E_FAIL;
+    }
+  }
+
+  if (SUCCEEDED(hr))
+  {
+    for (UINT j = 0; j < nEncoders && !found; j++)
+    {
+      if (pImageCodecInfo[j].MimeType == format)
+      {
+        *pGuid = pImageCodecInfo[j].Clsid;
+        found = true;
+      }
+    }
+
+    hr = found ? S_OK : E_FAIL;
+  }
+
+  return hr;
 }
