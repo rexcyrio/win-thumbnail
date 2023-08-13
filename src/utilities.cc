@@ -7,7 +7,7 @@
 #pragma comment(lib, "Gdiplus.lib")
 
 // taken from https://cplusplus.com/forum/windows/100661/
-HBITMAP GetThumbnail(std::wstring File)
+HBITMAP GetThumbnail(std::wstring File, int thumbnail_size)
 {
   std::wstring Folder, FileName;
   int Pos = File.find_last_of(L"\\");
@@ -37,8 +37,8 @@ HBITMAP GetThumbnail(std::wstring File)
     return NULL;
 
   SIZE size;
-  size.cx = 300;
-  size.cy = 300;
+  size.cx = thumbnail_size;
+  size.cy = thumbnail_size;
 
   DWORD dwFlags = IEIFLAG_ORIGSIZE | IEIFLAG_QUALITY;
 
