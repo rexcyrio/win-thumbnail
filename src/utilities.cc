@@ -8,6 +8,7 @@
 #include <objbase.h>
 #include "base64encode.cc"
 #include <memory>
+#include <gdiplusimaging.h>
 
 #pragma comment(lib, "Gdiplus.lib")
 
@@ -135,6 +136,10 @@ Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_forma
   CopyMemory(target_info.Scan0, source_info.bmBits, source_info.bmWidthBytes * source_info.bmHeight);
 
   s = target->UnlockBits(&target_info);
+  if (s != Gdiplus::Ok)
+    return s;
+
+  s = target->RotateFlip(Gdiplus::RotateFlipType::RotateNoneFlipY);
   if (s != Gdiplus::Ok)
     return s;
 
