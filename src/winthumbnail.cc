@@ -32,7 +32,7 @@ Napi::String Method(const Napi::CallbackInfo &info)
   }
 
   // HBITMAP hbitmap = GetThumbnail(L"C:\\Users\\Stefan Lee\\Downloads\\xeuphoria.jpg", 400);
-  HBITMAP hbitmap = GetFileThumbnail(L"C:\\Users\\Stefan Lee\\Downloads\\xeuphoria.jpg", 100);
+  HBITMAP hbitmap = GetFileThumbnail(L"C:\\Users\\Stefan Lee\\battery1.html", 100);
 
   convertHBitmapToCharBuffer(hbitmap);
 

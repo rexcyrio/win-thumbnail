@@ -113,31 +113,13 @@ HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 {
   CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
-  // taken from https://cpp.hotexamples.com/examples/-/-/SHParseDisplayName/cpp-shparsedisplayname-function-examples.html
-  IShellItem *p_shell_item = NULL;
   IShellItemImageFactory *p_shell_item_image_factory = NULL;
-  LPITEMIDLIST pidl = NULL;
-
   HRESULT hresult = NULL;
 
-  hresult = SHParseDisplayName(full_path.c_str(), 0, &pidl, 0, 0);
-  if (FAILED(hresult) || !pidl)
-  {
-    std::cout << "error 1" << std::endl;
-    return NULL;
-  }
-
-  hresult = SHCreateItemFromIDList(pidl, IID_IShellItem, (void **)&p_shell_item);
-  if (FAILED(hresult) || !p_shell_item)
-  {
-    std::cout << "error 2" << std::endl;
-    return NULL;
-  }
-
-  hresult = p_shell_item->BindToHandler(NULL, BHID_ThumbnailHandler, IID_IShellItemImageFactory, (void **)&p_shell_item_image_factory);
+  hresult = SHCreateItemFromParsingName(full_path.c_str(), NULL, IID_IShellItemImageFactory, (void **)&p_shell_item_image_factory);
   if (FAILED(hresult) || !p_shell_item_image_factory)
   {
-    std::cout << "error 3" << std::endl;
+    std::cerr << "SHCreateItemFromParsingName ERROR: " << std::hex << hresult << std::endl;
     return NULL;
   }
 
@@ -147,14 +129,13 @@ HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 
   HBITMAP hbitmap = NULL;
 
-  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK | SIIGBF_MEMORYONLY, &hbitmap);
+  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK, &hbitmap);
   if (FAILED(hresult) || !hbitmap)
   {
-    std::cout << "error 4" << std::endl;
+    std::cerr << "GetImage ERROR: " << std::hex << hresult << std::endl;
     return NULL;
   }
 
-  p_shell_item->Release();
   p_shell_item_image_factory->Release();
 
   CoUninitialize();
