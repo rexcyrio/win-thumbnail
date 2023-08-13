@@ -4,6 +4,8 @@
 #include <gdiplus.h>
 #include <vector>
 
+#pragma comment(lib, "Gdiplus.lib")
+
 // taken from https://cplusplus.com/forum/windows/100661/
 HBITMAP GetThumbnail(std::wstring File)
 {
