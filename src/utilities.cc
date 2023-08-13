@@ -10,56 +10,37 @@
 
 #pragma comment(lib, "Gdiplus.lib")
 
-// not used
-// taken from https://cplusplus.com/forum/windows/100661/
-HBITMAP GetThumbnail(std::wstring File, int thumbnail_size)
+HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 {
-  std::wstring Folder, FileName;
-  int Pos = File.find_last_of(L"\\");
-  Folder = File.substr(0, Pos);
-  FileName = File.substr(Pos + 1);
+  CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
-  IShellFolder *pDesktop = NULL;
-  IShellFolder *pSub = NULL;
-  IExtractImage *pIExtract = NULL;
-  LPITEMIDLIST pidl = NULL;
+  IShellItemImageFactory *p_shell_item_image_factory = NULL;
+  HRESULT hresult = NULL;
 
-  HRESULT hr;
-  hr = SHGetDesktopFolder(&pDesktop);
-  if (FAILED(hr))
+  hresult = SHCreateItemFromParsingName(full_path.c_str(), NULL, IID_IShellItemImageFactory, (void **)&p_shell_item_image_factory);
+  if (FAILED(hresult) || !p_shell_item_image_factory)
+  {
+    std::cerr << "SHCreateItemFromParsingName ERROR: " << std::hex << hresult << std::endl;
     return NULL;
-  hr = pDesktop->ParseDisplayName(NULL, NULL, (LPWSTR)Folder.c_str(), NULL, &pidl, NULL);
-  if (FAILED(hr))
-    return NULL;
-  hr = pDesktop->BindToObject(pidl, NULL, IID_IShellFolder, (void **)&pSub);
-  if (FAILED(hr))
-    return NULL;
-  hr = pSub->ParseDisplayName(NULL, NULL, (LPWSTR)FileName.c_str(), NULL, &pidl, NULL);
-  if (FAILED(hr))
-    return NULL;
-  hr = pSub->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST *)&pidl, IID_IExtractImage, NULL, (void **)&pIExtract);
-  if (FAILED(hr))
-    return NULL;
+  }
 
   SIZE size;
   size.cx = thumbnail_size;
   size.cy = thumbnail_size;
 
-  DWORD dwFlags = IEIFLAG_ORIGSIZE | IEIFLAG_QUALITY;
+  HBITMAP hbitmap = NULL;
 
-  HBITMAP hThumbnail = NULL;
+  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK, &hbitmap);
+  if (FAILED(hresult) || !hbitmap)
+  {
+    std::cerr << "GetImage ERROR: " << std::hex << hresult << std::endl;
+    return NULL;
+  }
 
-  // Set up the options for the image
-  OLECHAR pathBuffer[MAX_PATH];
-  hr = pIExtract->GetLocation(pathBuffer, MAX_PATH, NULL, &size, 32, &dwFlags);
+  p_shell_item_image_factory->Release();
 
-  // Get the image
-  hr = pIExtract->Extract(&hThumbnail);
-
-  pDesktop->Release();
-  pSub->Release();
-
-  return hThumbnail;
+  CoUninitialize();
+  return hbitmap;
 }
 
 // taken from https://stackoverflow.com/a/51388079
@@ -111,95 +92,4 @@ std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
 
   // clean up
   // delete[] buffer;
-}
-
-HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
-{
-  CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-
-  IShellItemImageFactory *p_shell_item_image_factory = NULL;
-  HRESULT hresult = NULL;
-
-  hresult = SHCreateItemFromParsingName(full_path.c_str(), NULL, IID_IShellItemImageFactory, (void **)&p_shell_item_image_factory);
-  if (FAILED(hresult) || !p_shell_item_image_factory)
-  {
-    std::cerr << "SHCreateItemFromParsingName ERROR: " << std::hex << hresult << std::endl;
-    return NULL;
-  }
-
-  SIZE size;
-  size.cx = thumbnail_size;
-  size.cy = thumbnail_size;
-
-  HBITMAP hbitmap = NULL;
-
-  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK, &hbitmap);
-  if (FAILED(hresult) || !hbitmap)
-  {
-    std::cerr << "GetImage ERROR: " << std::hex << hresult << std::endl;
-    return NULL;
-  }
-
-  p_shell_item_image_factory->Release();
-
-  CoUninitialize();
-  return hbitmap;
-}
-
-// not used
-// taken from https://stackoverflow.com/a/5346026
-HRESULT GetGdiplusEncoderClsid(const std::wstring &format, GUID *pGuid)
-{
-  HRESULT hr = S_OK;
-  UINT nEncoders = 0; // number of image encoders
-  UINT nSize = 0;     // size of the image encoder array in bytes
-  std::vector<BYTE> spData;
-  Gdiplus::ImageCodecInfo *pImageCodecInfo = NULL;
-  Gdiplus::Status status;
-  bool found = false;
-
-  if (format.empty() || !pGuid)
-  {
-    hr = E_INVALIDARG;
-  }
-
-  if (SUCCEEDED(hr))
-  {
-    *pGuid = GUID_NULL;
-    status = Gdiplus::GetImageEncodersSize(&nEncoders, &nSize);
-
-    if ((status != Gdiplus::Ok) || (nSize == 0))
-    {
-      hr = E_FAIL;
-    }
-  }
-
-  if (SUCCEEDED(hr))
-  {
-
-    spData.resize(nSize);
-    pImageCodecInfo = (Gdiplus::ImageCodecInfo *)&spData.front();
-    status = Gdiplus::GetImageEncoders(nEncoders, nSize, pImageCodecInfo);
-
-    if (status != Gdiplus::Ok)
-    {
-      hr = E_FAIL;
-    }
-  }
-
-  if (SUCCEEDED(hr))
-  {
-    for (UINT j = 0; j < nEncoders && !found; j++)
-    {
-      if (pImageCodecInfo[j].MimeType == format)
-      {
-        *pGuid = pImageCodecInfo[j].Clsid;
-        found = true;
-      }
-    }
-
-    hr = found ? S_OK : E_FAIL;
-  }
-
-  return hr;
 }
