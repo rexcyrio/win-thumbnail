@@ -4,6 +4,8 @@
 #include <gdiplus.h>
 #include <vector>
 #include <iostream>
+#include <combaseapi.h>
+#include <objbase.h>
 
 #pragma comment(lib, "Gdiplus.lib")
 
@@ -109,6 +111,8 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
 
 HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 {
+  CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+
   // taken from https://cpp.hotexamples.com/examples/-/-/SHParseDisplayName/cpp-shparsedisplayname-function-examples.html
   IShellItem *p_shell_item = NULL;
   IShellItemImageFactory *p_shell_item_image_factory = NULL;
@@ -153,6 +157,7 @@ HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
   p_shell_item->Release();
   p_shell_item_image_factory->Release();
 
+  CoUninitialize();
   return hbitmap;
 }
 
