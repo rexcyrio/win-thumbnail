@@ -1,4 +1,5 @@
 #include <napi.h>
+#include "utilities.cc"
 
 Napi::String Method(const Napi::CallbackInfo &info)
 {
@@ -29,6 +30,9 @@ Napi::String Method(const Napi::CallbackInfo &info)
 
     return Napi::String::New(env, "");
   }
+
+  HBITMAP hbitmap = GetThumbnail(L"C:\\Users\\Stefan Lee\\Downloads\\xeuphoria.jpg");
+  convertHBitmapToCharBuffer(hbitmap);
 
   return first_argument;
 }

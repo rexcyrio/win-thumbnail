@@ -79,7 +79,7 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
   // reference: https://learn.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-retrieving-the-class-identifier-for-an-encoder-use
 
   // uncomment to save thumbnail image to file
-  // bitmap.Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
+  bitmap.Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
 
   // get memory handle associated with istream
   HGLOBAL hg = NULL;
