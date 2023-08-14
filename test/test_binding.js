@@ -16,6 +16,10 @@ function main() {
   });
 
   assert.throws(() => {
+    winthumbnail.create("");
+  });
+
+  assert.throws(() => {
     winthumbnail.create("C:\\Users\\Stefan Lee\\dummy");
   });
 }
