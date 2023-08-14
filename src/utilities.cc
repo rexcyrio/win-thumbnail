@@ -97,9 +97,13 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
   // release will automatically free the memory allocated in CreateStreamOnHGlobal
   istream->Release();
 
-  Gdiplus::GdiplusShutdown(gdiplusToken);
+  // when uncommented, the JavaScript tests do not complete
+  // Gdiplus::GdiplusShutdown(gdiplusToken);
 
   // PNG image data is now available in the variable `buffer` with size `bufsize`
+
+  // clean up
+  delete[] buffer;
 }
 
 // not used
