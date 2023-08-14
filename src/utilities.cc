@@ -77,7 +77,7 @@ std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
   // reference: https://learn.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-retrieving-the-class-identifier-for-an-encoder-use
 
   // uncomment to save thumbnail image to file
-  (*p_bitmap_with_alpha_channel).Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
+  // (*p_bitmap_with_alpha_channel).Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
 
   // get memory handle associated with istream
   HGLOBAL hg = NULL;
