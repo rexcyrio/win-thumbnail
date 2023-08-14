@@ -6,9 +6,11 @@
 #include <iostream>
 #include <combaseapi.h>
 #include <objbase.h>
+#include "base64encode.cc"
 
 #pragma comment(lib, "Gdiplus.lib")
 
+// not used
 // taken from https://cplusplus.com/forum/windows/100661/
 HBITMAP GetThumbnail(std::wstring File, int thumbnail_size)
 {
@@ -61,7 +63,7 @@ HBITMAP GetThumbnail(std::wstring File, int thumbnail_size)
 }
 
 // taken from https://stackoverflow.com/a/51388079
-void convertHBitmapToCharBuffer(HBITMAP hbitmap)
+std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
 {
   // taken from https://learn.microsoft.com/en-us/windows/win32/api/gdiplusinit/nf-gdiplusinit-gdiplusstartup
   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -82,7 +84,7 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
   // reference: https://learn.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-retrieving-the-class-identifier-for-an-encoder-use
 
   // uncomment to save thumbnail image to file
-  bitmap.Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
+  // bitmap.Save(L"C:\\Users\\Stefan Lee\\Desktop\\test.png", &clsid_png);
 
   // get memory handle associated with istream
   HGLOBAL hg = NULL;
@@ -90,7 +92,7 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
 
   // copy IStream to buffer
   int bufsize = GlobalSize(hg);
-  char *buffer = new char[bufsize];
+  unsigned char *buffer = new unsigned char[bufsize];
 
   // lock & unlock memory
   LPVOID ptr = GlobalLock(hg);
@@ -104,9 +106,11 @@ void convertHBitmapToCharBuffer(HBITMAP hbitmap)
   // Gdiplus::GdiplusShutdown(gdiplusToken);
 
   // PNG image data is now available in the variable `buffer` with size `bufsize`
+  std::string base64_string = base64_encode(buffer, bufsize);
+  return "data:image/png;base64," + base64_string;
 
   // clean up
-  delete[] buffer;
+  // delete[] buffer;
 }
 
 HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
