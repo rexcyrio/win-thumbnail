@@ -12,9 +12,9 @@
 
 #pragma comment(lib, "Gdiplus.lib")
 
-Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_format, Gdiplus::Bitmap **result_out);
+Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_format, Gdiplus::Bitmap **result_out, bool *doesThumbnailRequireFlipping);
 
-HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
+HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size, bool *doesThumbnailRequireFlipping)
 {
   CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
@@ -34,11 +34,22 @@ HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 
   HBITMAP hbitmap = NULL;
 
-  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK, &hbitmap);
+  // reference: https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ishellitemimagefactory-getimage
+
+  // try `SIIGBF_THUMBNAILONLY` first
+  hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK | SIIGBF_THUMBNAILONLY, &hbitmap);
   if (FAILED(hresult) || !hbitmap)
   {
-    std::cerr << "GetImage ERROR: " << std::hex << hresult << std::endl;
-    return NULL;
+    // try `SIIGBF_ICONONLY` second
+    hresult = p_shell_item_image_factory->GetImage(size, SIIGBF_RESIZETOFIT | SIIGBF_BIGGERSIZEOK | SIIGBF_ICONONLY, &hbitmap);
+    if (FAILED(hresult) || !hbitmap)
+    {
+      std::cerr << "GetImage ERROR: " << std::hex << hresult << std::endl;
+      return NULL;
+    }
+
+    // if `SIIGBF_ICONONLY` is used, the thumbnail produced requires flipping
+    *doesThumbnailRequireFlipping = true;
   }
 
   p_shell_item_image_factory->Release();
@@ -48,7 +59,7 @@ HBITMAP GetFileThumbnail(std::wstring full_path, int thumbnail_size)
 }
 
 // taken from https://stackoverflow.com/a/51388079
-std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
+std::string convertHBitmapToDataUrl(HBITMAP hbitmap, bool *doesThumbnailRequireFlipping)
 {
   // taken from https://learn.microsoft.com/en-us/windows/win32/api/gdiplusinit/nf-gdiplusinit-gdiplusstartup
   Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -60,7 +71,7 @@ std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
 
   Gdiplus::Bitmap *p_bitmap_with_alpha_channel = NULL;
 
-  Gdiplus::Status s = HBitmapToBitmap(hbitmap, PixelFormat32bppARGB, &p_bitmap_with_alpha_channel);
+  Gdiplus::Status s = HBitmapToBitmap(hbitmap, PixelFormat32bppARGB, &p_bitmap_with_alpha_channel, doesThumbnailRequireFlipping);
   if (s != Gdiplus::Ok)
   {
     std::cerr << "HBitmapToBitmap ERROR: " << s << std::endl;
@@ -107,7 +118,7 @@ std::string convertHBitmapToDataUrl(HBITMAP hbitmap)
 }
 
 // taken from https://stackoverflow.com/a/5860094
-Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_format, Gdiplus::Bitmap **result_out)
+Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_format, Gdiplus::Bitmap **result_out, bool *doesThumbnailRequireFlipping)
 {
   BITMAP source_info = {0};
   if (!::GetObject(source, sizeof(source_info), &source_info))
@@ -139,9 +150,12 @@ Gdiplus::Status HBitmapToBitmap(HBITMAP source, Gdiplus::PixelFormat pixel_forma
   if (s != Gdiplus::Ok)
     return s;
 
-  s = target->RotateFlip(Gdiplus::RotateFlipType::RotateNoneFlipY);
-  if (s != Gdiplus::Ok)
-    return s;
+  if ((*doesThumbnailRequireFlipping) == true)
+  {
+    s = target->RotateFlip(Gdiplus::RotateFlipType::RotateNoneFlipY);
+    if (s != Gdiplus::Ok)
+      return s;
+  }
 
   *result_out = target.release();
 

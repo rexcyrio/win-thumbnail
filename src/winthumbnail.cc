@@ -71,9 +71,11 @@ Napi::String Method(const Napi::CallbackInfo &info)
   }
 
   std::wstring path_wstring(path_string.begin(), path_string.end());
-  HBITMAP hbitmap = GetFileThumbnail(path_wstring, thumbnail_size);
 
-  std::string dataUrl = convertHBitmapToDataUrl(hbitmap);
+  bool doesThumbnailRequireFlipping = false;
+  HBITMAP hbitmap = GetFileThumbnail(path_wstring, thumbnail_size, &doesThumbnailRequireFlipping);
+
+  std::string dataUrl = convertHBitmapToDataUrl(hbitmap, &doesThumbnailRequireFlipping);
 
   return Napi::String::New(env, dataUrl);
 }
