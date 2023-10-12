@@ -48,7 +48,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\winthumbnail.cc">
+    <ClCompile Include="..\src\win-thumbnail.cc">
       <Filter>..\src</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Stefan Lee\scoop\persist\nodejs-lts\bin\node_modules\npm\node_modules\node-gyp\src\win_delay_load_hook.cc">

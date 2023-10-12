@@ -1,8 +1,8 @@
 {
   'targets': [
     {
-      'target_name': 'winthumbnail-native',
-      'sources': [ 'src/winthumbnail.cc' ],
+      'target_name': 'win-thumbnail-native',
+      'sources': [ 'src/win-thumbnail.cc' ],
       'include_dirs': ["<!@(node -p \"require('node-addon-api').include\")"],
       'dependencies': ["<!(node -p \"require('node-addon-api').gyp\")"],
       'cflags!': [ '-fno-exceptions' ],

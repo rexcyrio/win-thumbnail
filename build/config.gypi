@@ -401,19 +401,19 @@
     "v8_trace_maps": 0,
     "v8_use_siphash": 1,
     "want_separate_host_toolset": 0,
-    "nodedir": "C:\\Users\\Stefan Lee\\AppData\\Local\\node-gyp\\Cache\\18.17.1",
+    "nodedir": "C:\\Users\\Stefan Lee\\AppData\\Local\\node-gyp\\Cache\\18.18.1",
     "standalone_static_library": 1,
     "msbuild_path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
     "cache": "C:\\Users\\Stefan Lee\\scoop\\persist\\nodejs-lts\\cache",
     "globalconfig": "C:\\Users\\Stefan Lee\\scoop\\persist\\nodejs-lts\\bin\\etc\\npmrc",
     "global_prefix": "C:\\Users\\Stefan Lee\\scoop\\persist\\nodejs-lts\\bin",
     "init_module": "C:\\Users\\Stefan Lee\\.npm-init.js",
-    "local_prefix": "C:\\Users\\Stefan Lee\\Documents\\Development\\winthumbnail",
+    "local_prefix": "C:\\Users\\Stefan Lee\\Documents\\Development\\win-thumbnail",
     "metrics_registry": "https://registry.npmjs.org/",
     "node_gyp": "C:\\Users\\Stefan Lee\\scoop\\persist\\nodejs-lts\\bin\\node_modules\\npm\\node_modules\\node-gyp\\bin\\node-gyp.js",
     "npm_version": "9.8.1",
     "prefix": "C:\\Users\\Stefan Lee\\scoop\\persist\\nodejs-lts\\bin",
     "userconfig": "C:\\Users\\Stefan Lee\\.npmrc",
-    "user_agent": "npm/9.8.1 node/v18.17.1 win32 x64 workspaces/false"
+    "user_agent": "npm/9.8.1 node/v18.18.1 win32 x64 workspaces/false"
   }
 }

@@ -1,11 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winthumbnail-native", "winthumbnail-native.vcxproj", "{E5010825-B4C7-B8A2-650C-968355C92A50}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win-thumbnail-native", "win-thumbnail-native.vcxproj", "{64E3798E-D480-6F62-6D3A-3D82106643A2}"
 	ProjectSection(ProjectDependencies) = postProject
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8} = {339D7C5D-9ECC-8486-8122-2AAFBD5877E8}
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109} = {947D10A0-79C5-88D0-C377-49CC1EC9A109}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nothing", "..\node_modules\node-addon-api\src\nothing.vcxproj", "{339D7C5D-9ECC-8486-8122-2AAFBD5877E8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nothing", "..\node_modules\node-addon-api\src\nothing.vcxproj", "{947D10A0-79C5-88D0-C377-49CC1EC9A109}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Users)", "..\Users", "{83FD2216-DE8C-3729-D4EA-3618B14F3F2D}"
 EndProject
@@ -15,13 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Documents)", "..\Users\Ste
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Development)", "..\Users\Stefan Lee\Documents\Development", "{153BACD5-E480-2F63-4608-9AE0A59C549D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(winthumbnail)", "..\Users\Stefan Lee\Documents\Development\winthumbnail", "{576CD2DF-3EAF-02D9-6BAC-8B3835088D77}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(win-thumbnail)", "..\Users\Stefan Lee\Documents\Development\win-thumbnail", "{FD03D073-035A-8E3E-D322-9F4243BD03D6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node_modules)", "..\Users\Stefan Lee\Documents\Development\winthumbnail\node_modules", "{DCD1DC2A-CF1C-1F42-07FF-F0F40E716D84}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node_modules)", "..\Users\Stefan Lee\Documents\Development\win-thumbnail\node_modules", "{228015FD-CEB1-7D9C-6E06-7D026F7FF032}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node-addon-api)", "..\Users\Stefan Lee\Documents\Development\winthumbnail\node_modules\node-addon-api", "{1F1C0261-F210-0D35-8CDA-0CA1826DF15F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(node-addon-api)", "..\Users\Stefan Lee\Documents\Development\win-thumbnail\node_modules\node-addon-api", "{606F41FD-1B36-25D5-3202-2D641AFC2130}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(src)", "..\Users\Stefan Lee\Documents\Development\winthumbnail\node_modules\node-addon-api\src", "{D7A88DA4-CB04-9B0A-FE8E-786ECD68ECAE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(src)", "..\Users\Stefan Lee\Documents\Development\win-thumbnail\node_modules\node-addon-api\src", "{96F5DBC2-8344-F693-8655-A7BCE84CF848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,14 +29,14 @@ Global
 		Debug|x64 = Debug|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8}.Release|x64.ActiveCfg = Release|x64
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8}.Release|x64.Build.0 = Release|x64
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8}.Debug|x64.ActiveCfg = Debug|x64
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8}.Debug|x64.Build.0 = Debug|x64
-		{E5010825-B4C7-B8A2-650C-968355C92A50}.Release|x64.ActiveCfg = Release|x64
-		{E5010825-B4C7-B8A2-650C-968355C92A50}.Release|x64.Build.0 = Release|x64
-		{E5010825-B4C7-B8A2-650C-968355C92A50}.Debug|x64.ActiveCfg = Debug|x64
-		{E5010825-B4C7-B8A2-650C-968355C92A50}.Debug|x64.Build.0 = Debug|x64
+		{64E3798E-D480-6F62-6D3A-3D82106643A2}.Release|x64.ActiveCfg = Release|x64
+		{64E3798E-D480-6F62-6D3A-3D82106643A2}.Release|x64.Build.0 = Release|x64
+		{64E3798E-D480-6F62-6D3A-3D82106643A2}.Debug|x64.ActiveCfg = Debug|x64
+		{64E3798E-D480-6F62-6D3A-3D82106643A2}.Debug|x64.Build.0 = Debug|x64
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109}.Release|x64.ActiveCfg = Release|x64
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109}.Release|x64.Build.0 = Release|x64
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109}.Debug|x64.ActiveCfg = Debug|x64
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,10 +45,10 @@ Global
 		{B855592B-23C0-B4EC-8D1F-BE184DDF64AA} = {83FD2216-DE8C-3729-D4EA-3618B14F3F2D}
 		{2F7050E1-A564-FB82-7BF0-F4F23DEC68ED} = {B855592B-23C0-B4EC-8D1F-BE184DDF64AA}
 		{153BACD5-E480-2F63-4608-9AE0A59C549D} = {2F7050E1-A564-FB82-7BF0-F4F23DEC68ED}
-		{576CD2DF-3EAF-02D9-6BAC-8B3835088D77} = {153BACD5-E480-2F63-4608-9AE0A59C549D}
-		{DCD1DC2A-CF1C-1F42-07FF-F0F40E716D84} = {576CD2DF-3EAF-02D9-6BAC-8B3835088D77}
-		{1F1C0261-F210-0D35-8CDA-0CA1826DF15F} = {DCD1DC2A-CF1C-1F42-07FF-F0F40E716D84}
-		{D7A88DA4-CB04-9B0A-FE8E-786ECD68ECAE} = {1F1C0261-F210-0D35-8CDA-0CA1826DF15F}
-		{339D7C5D-9ECC-8486-8122-2AAFBD5877E8} = {D7A88DA4-CB04-9B0A-FE8E-786ECD68ECAE}
+		{FD03D073-035A-8E3E-D322-9F4243BD03D6} = {153BACD5-E480-2F63-4608-9AE0A59C549D}
+		{228015FD-CEB1-7D9C-6E06-7D026F7FF032} = {FD03D073-035A-8E3E-D322-9F4243BD03D6}
+		{606F41FD-1B36-25D5-3202-2D641AFC2130} = {228015FD-CEB1-7D9C-6E06-7D026F7FF032}
+		{96F5DBC2-8344-F693-8655-A7BCE84CF848} = {606F41FD-1B36-25D5-3202-2D641AFC2130}
+		{947D10A0-79C5-88D0-C377-49CC1EC9A109} = {96F5DBC2-8344-F693-8655-A7BCE84CF848}
 	EndGlobalSection
 EndGlobal

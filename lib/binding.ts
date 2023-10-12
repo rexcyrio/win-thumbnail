@@ -1,3 +1,3 @@
-const winthumbnail = require("../build/Release/winthumbnail-native");
+const winThumbnail = require("../build/Release/win-thumbnail-native");
 
-export = winthumbnail;
+export = winThumbnail;
